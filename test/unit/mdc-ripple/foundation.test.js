@@ -42,8 +42,7 @@ test('defaultAdapter returns a complete adapter implementation', () => {
     'browserSupportsCssVars', 'isUnbounded', 'isSurfaceActive', 'isSurfaceDisabled',
     'addClass', 'removeClass', 'containsEventTarget', 'registerInteractionHandler', 'deregisterInteractionHandler',
     'registerDocumentInteractionHandler', 'deregisterDocumentInteractionHandler',
-    'registerResizeHandler', 'deregisterResizeHandler', 'updateCssVariable',
-    'computeBoundingRect', 'getWindowPageOffset',
+    'updateCssVariable', 'computeBoundingRect', 'getWindowPageOffset',
   ]);
 });
 
@@ -84,12 +83,6 @@ testFoundation('#init registers events for interactions on root element', ({foun
   td.verify(adapter.registerInteractionHandler(td.matchers.isA(String), td.matchers.isA(Function)));
 });
 
-testFoundation('#init registers an event for when a resize occurs', ({foundation, adapter}) => {
-  foundation.init();
-
-  td.verify(adapter.registerResizeHandler(td.matchers.isA(Function)));
-});
-
 testFoundation('#init does not register events if CSS custom properties not supported', ({foundation, adapter}) => {
   td.when(adapter.browserSupportsCssVars()).thenReturn(false);
   foundation.init();
@@ -113,17 +106,6 @@ testFoundation('#destroy unregisters all bound interaction handlers', ({foundati
   });
 
   td.verify(adapter.deregisterDocumentInteractionHandler(td.matchers.isA(String), td.matchers.isA(Function)));
-});
-
-testFoundation('#destroy unregisters the resize handler', ({foundation, adapter}) => {
-  let resizeHandler;
-  td.when(adapter.registerResizeHandler(td.matchers.isA(Function))).thenDo((handler) => {
-    resizeHandler = handler;
-  });
-  foundation.init();
-  foundation.destroy();
-
-  td.verify(adapter.deregisterResizeHandler(resizeHandler));
 });
 
 testFoundation(`#destroy removes ${cssClasses.ROOT}`, ({foundation, adapter, mockRaf}) => {
@@ -175,7 +157,6 @@ testFoundation('#destroy does nothing if CSS custom properties are not supported
   mockRaf.flush();
 
   td.verify(adapter.deregisterInteractionHandler(isA(String), isA(Function)), {times: 0});
-  td.verify(adapter.deregisterResizeHandler(isA(Function)), {times: 0});
   td.verify(adapter.removeClass(isA(String)), {times: 0});
   td.verify(adapter.updateCssVariable(isA(String), isA(String)), {times: 0});
 });

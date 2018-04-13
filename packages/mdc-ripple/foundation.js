@@ -99,8 +99,6 @@ class MDCRippleFoundation extends MDCFoundation {
       deregisterInteractionHandler: (/* evtType: string, handler: EventListener */) => {},
       registerDocumentInteractionHandler: (/* evtType: string, handler: EventListener */) => {},
       deregisterDocumentInteractionHandler: (/* evtType: string, handler: EventListener */) => {},
-      registerResizeHandler: (/* handler: EventListener */) => {},
-      deregisterResizeHandler: (/* handler: EventListener */) => {},
       updateCssVariable: (/* varName: string, value: string */) => {},
       computeBoundingRect: () => /* ClientRect */ {},
       getWindowPageOffset: () => /* {x: number, y: number} */ {},
@@ -140,9 +138,6 @@ class MDCRippleFoundation extends MDCFoundation {
     this.blurHandler_ = () => requestAnimationFrame(
       () => this.adapter_.removeClass(MDCRippleFoundation.cssClasses.BG_FOCUSED)
     );
-
-    /** @private {!Function} */
-    this.resizeHandler_ = () => this.layout();
 
     /** @private {!{left: number, top:number}} */
     this.unboundedCoords_ = {
@@ -243,7 +238,6 @@ class MDCRippleFoundation extends MDCFoundation {
     });
     this.adapter_.registerInteractionHandler('focus', this.focusHandler_);
     this.adapter_.registerInteractionHandler('blur', this.blurHandler_);
-    this.adapter_.registerResizeHandler(this.resizeHandler_);
   }
 
   /**
@@ -267,7 +261,6 @@ class MDCRippleFoundation extends MDCFoundation {
     });
     this.adapter_.deregisterInteractionHandler('focus', this.focusHandler_);
     this.adapter_.deregisterInteractionHandler('blur', this.blurHandler_);
-    this.adapter_.deregisterResizeHandler(this.resizeHandler_);
   }
 
   /** @private */

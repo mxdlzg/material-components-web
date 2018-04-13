@@ -180,26 +180,6 @@ test('adapter#deregisterDocumentInteractionHandler proxies to removeEventListene
   td.verify(handler(td.matchers.anything()), {times: 0});
 });
 
-test('adapter#registerResizeHandler uses the handler as a window resize listener', () => {
-  const {component} = setupTest();
-  const handler = td.func('resizeHandler');
-  component.getDefaultFoundation().adapter_.registerResizeHandler(handler);
-  domEvents.emit(window, 'resize');
-  td.verify(handler(td.matchers.anything()));
-  window.removeEventListener('resize', handler);
-});
-
-test('adapter#deregisterResizeHandler unlistens the handler for window resize', () => {
-  const {component} = setupTest();
-  const handler = td.func('resizeHandler');
-  window.addEventListener('resize', handler);
-  component.getDefaultFoundation().adapter_.deregisterResizeHandler(handler);
-  domEvents.emit(window, 'resize');
-  td.verify(handler(td.matchers.anything()), {times: 0});
-  // Just to be safe
-  window.removeEventListener('resize', handler);
-});
-
 if (util.supportsCssVariables(window)) {
   test('adapter#updateCssVariable calls setProperty on root style with varName and value', () => {
     const {root, component} = setupTest();
